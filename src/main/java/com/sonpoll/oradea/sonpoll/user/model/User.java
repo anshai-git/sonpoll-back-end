@@ -1,13 +1,14 @@
 package com.sonpoll.oradea.sonpoll.user.model;
 
 import lombok.Data;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
 
 @Document("users")
 @Data
+@NoArgsConstructor
 public class User {
     @Id
     private String id;

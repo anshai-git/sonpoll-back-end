@@ -1,7 +1,6 @@
 package com.sonpoll.oradea.sonpoll;
 
-import com.sonpoll.oradea.sonpoll.user.model.User;
-import com.sonpoll.oradea.sonpoll.user.model.repository.UserRepository;
+import com.sonpoll.oradea.sonpoll.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

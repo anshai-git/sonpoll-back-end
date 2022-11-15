@@ -1,4 +1,4 @@
-package com.sonpoll.oradea.sonpoll.user.model.repository;
+package com.sonpoll.oradea.sonpoll.user.repository;
 
 import com.sonpoll.oradea.sonpoll.user.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
