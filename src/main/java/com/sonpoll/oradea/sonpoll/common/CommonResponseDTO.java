@@ -1,8 +1,10 @@
 package com.sonpoll.oradea.sonpoll.common;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class CommonResponseDTO<T> {
     private T response;
     private String error;
@@ -12,7 +14,7 @@ public class CommonResponseDTO<T> {
         this.error = error;
     }
 
-    public static CommonResponseDTO createSuccesResponse(final Object responseData) {
+    public static <T> CommonResponseDTO createSuccesResponse(final T responseData) {
         return new CommonResponseDTO(responseData, null);
     }
 

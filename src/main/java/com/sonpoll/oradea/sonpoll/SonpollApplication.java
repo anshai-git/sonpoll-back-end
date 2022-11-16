@@ -1,5 +1,7 @@
 package com.sonpoll.oradea.sonpoll;
 
+import com.sonpoll.oradea.sonpoll.common.CommonResponseDTO;
+import com.sonpoll.oradea.sonpoll.user.model.User;
 import com.sonpoll.oradea.sonpoll.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -23,5 +25,8 @@ public class SonpollApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 //        userRepository.save(new User("username", "email", "pass"));
         userRepository.findAll().forEach(user -> System.out.println(user.toString()));
+        CommonResponseDTO succesResponse = CommonResponseDTO.createSuccesResponse(new User());
+        CommonResponseDTO error = CommonResponseDTO.createFailResponse("Error");
+        System.out.println("succesResponse" + succesResponse.toString());
     }
 }
