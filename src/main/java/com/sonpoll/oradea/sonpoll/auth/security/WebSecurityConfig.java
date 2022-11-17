@@ -26,7 +26,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         prePostEnabled = true)
 @EnableMongoRepositories
 public class WebSecurityConfig { //extends WebSecurityConfigurerAdapter
-    // TODO Flisc 16.11.2022 update WebSecurityConfigurerAdapter
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 

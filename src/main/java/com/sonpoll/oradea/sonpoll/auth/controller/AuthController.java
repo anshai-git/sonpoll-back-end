@@ -2,6 +2,7 @@ package com.sonpoll.oradea.sonpoll.auth.controller;
 
 import com.sonpoll.oradea.sonpoll.auth.security.jwt.JwtUtil;
 import com.sonpoll.oradea.sonpoll.auth.security.services.UserDetailsImpl;
+import com.sonpoll.oradea.sonpoll.common.CommonError;
 import com.sonpoll.oradea.sonpoll.common.CommonRequestDTO;
 import com.sonpoll.oradea.sonpoll.common.CommonResponseDTO;
 import com.sonpoll.oradea.sonpoll.common.request.LoginRequestDTO;
@@ -48,13 +49,13 @@ public class AuthController {
         if (userService.findByUsername(request.getUsername()).isPresent()) {
             return ResponseEntity
                     .badRequest()
-                    .body(CommonResponseDTO.createFailResponse("Username already exist"));
+                    .body(CommonResponseDTO.createFailResponse(new CommonError("Username already exist")));
         }
 
         if (userService.existsByEmail(request.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body(CommonResponseDTO.createFailResponse("Email already exist"));
+                    .body(CommonResponseDTO.createFailResponse(new CommonError("Email already exist")));
         }
         User user = new User(request.getUsername(),
                 request.getEmail(),
@@ -71,7 +72,6 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtUtil.generateJwtToken(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
         return ResponseEntity.ok(
                 CommonResponseDTO.createSuccesResponse(LoginResponseDTO.builder()
                         .id(userDetails.getId())

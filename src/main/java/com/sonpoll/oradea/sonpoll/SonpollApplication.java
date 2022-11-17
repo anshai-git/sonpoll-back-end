@@ -1,5 +1,6 @@
 package com.sonpoll.oradea.sonpoll;
 
+import com.sonpoll.oradea.sonpoll.common.CommonError;
 import com.sonpoll.oradea.sonpoll.common.CommonResponseDTO;
 import com.sonpoll.oradea.sonpoll.user.model.User;
 import com.sonpoll.oradea.sonpoll.user.repository.UserRepository;
@@ -28,7 +29,7 @@ public class SonpollApplication implements CommandLineRunner {
 //        userRepository.save(new User("username", "email", "pass"));
         userRepository.findAll().forEach(user -> System.out.println(user.toString()));
         CommonResponseDTO succesResponse = CommonResponseDTO.createSuccesResponse(new User());
-        CommonResponseDTO error = CommonResponseDTO.createFailResponse("Error");
+        CommonResponseDTO error = CommonResponseDTO.createFailResponse(new CommonError("UNAUTHORIZED", "You don't have acces here "));
         System.out.println("succesResponse" + succesResponse.toString());
 //        sendEmail();
 

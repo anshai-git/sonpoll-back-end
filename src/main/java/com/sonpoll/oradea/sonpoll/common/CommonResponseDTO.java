@@ -7,9 +7,9 @@ import lombok.ToString;
 @ToString
 public class CommonResponseDTO<T> {
     private T response;
-    private String error;
+    private CommonError error;// TODO Flisc 17.11.2022 ErrorObject with code  && message
 
-    private CommonResponseDTO(final T response, final String error) {
+    private CommonResponseDTO(final T response, final CommonError error) {
         this.response = response;
         this.error = error;
     }
@@ -18,7 +18,7 @@ public class CommonResponseDTO<T> {
         return new CommonResponseDTO(responseData, null);
     }
 
-    public static CommonResponseDTO createFailResponse(final String error) {
+    public static CommonResponseDTO createFailResponse(final CommonError error) {
         return new CommonResponseDTO(null, error);
     }
 }
