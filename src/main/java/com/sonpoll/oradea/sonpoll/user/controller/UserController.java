@@ -1,9 +1,12 @@
 package com.sonpoll.oradea.sonpoll.user.controller;
 
+import com.sonpoll.oradea.sonpoll.common.CommonRequestDTO;
+import com.sonpoll.oradea.sonpoll.common.request.ResetPasswordRequestDTO;
 import com.sonpoll.oradea.sonpoll.user.model.User;
 import com.sonpoll.oradea.sonpoll.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,8 +32,8 @@ public class UserController {
     }
 
     @GetMapping("/resetpass")
-    public String resetPassword() throws MessagingException, IOException {
-        userService.sendResetPassEmail();
+    public String resetPassword(@RequestBody CommonRequestDTO<ResetPasswordRequestDTO> request) throws MessagingException, IOException {
+        userService.sendResetPassEmail(request.getPayload());
         return "Email sent";
     }
 
