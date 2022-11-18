@@ -1,9 +1,7 @@
 package com.sonpoll.oradea.sonpoll;
 
-import com.sonpoll.oradea.sonpoll.common.CommonError;
-import com.sonpoll.oradea.sonpoll.common.CommonResponseDTO;
-import com.sonpoll.oradea.sonpoll.user.model.User;
 import com.sonpoll.oradea.sonpoll.user.repository.UserRepository;
+import com.sonpoll.oradea.sonpoll.user.repository.UserTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,6 +17,8 @@ public class SonpollApplication implements CommandLineRunner {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserTokenRepository userTokenRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(SonpollApplication.class, args);
@@ -26,11 +26,13 @@ public class SonpollApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        userRepository.save(new User("username", "email", "pass"));
+        System.out.println("DB Users: \n ");
         userRepository.findAll().forEach(user -> System.out.println(user.toString()));
-        CommonResponseDTO succesResponse = CommonResponseDTO.createSuccesResponse(new User());
-        CommonResponseDTO error = CommonResponseDTO.createFailResponse(new CommonError("UNAUTHORIZED", "You don't have acces here "));
-        System.out.println("succesResponse" + succesResponse.toString());
+        System.out.println("DB Tokens: \n ");
+        userTokenRepository.findAll().forEach(user -> System.out.println(user.toString()));
+//        CommonResponseDTO succesResponse = CommonResponseDTO.createSuccesResponse(new User());
+//        CommonResponseDTO error = CommonResponseDTO.createFailResponse(new CommonError("UNAUTHORIZED", "You don't have acces here "));
+//        System.out.println("succesResponse" + succesResponse.toString());
 //        sendEmail();
 
     }
