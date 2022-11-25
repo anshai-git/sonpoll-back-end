@@ -1,6 +1,8 @@
 package com.sonpoll.oradea.sonpoll.user.controller;
 
+import com.sonpoll.oradea.sonpoll.common.CommonError;
 import com.sonpoll.oradea.sonpoll.common.CommonRequestDTO;
+import com.sonpoll.oradea.sonpoll.common.CommonResponseDTO;
 import com.sonpoll.oradea.sonpoll.common.request.ResetPasswordRequestDTO;
 import com.sonpoll.oradea.sonpoll.mail.ResetEmailRequest;
 import com.sonpoll.oradea.sonpoll.user.model.User;
@@ -12,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.mail.MessagingException;
-import java.io.IOException;
 import java.util.List;
 
 @RestController()
@@ -29,15 +29,18 @@ public class UserController {
     }
 
     @PostMapping("/resetPassword")
-    public String resetPassword(@RequestBody CommonRequestDTO<ResetEmailRequest> request) throws MessagingException, IOException {
+    public CommonResponseDTO resetPassword(@RequestBody CommonRequestDTO<ResetEmailRequest> request)  {
         userService.sendResetPassEmail(request.getPayload().getEmail());
-        return "Email sent";
+        return CommonResponseDTO.createSuccesResponse("Email has been sent");
     }
 
     @PostMapping("/updatePassword")
-    public String updatePasswordForUser(@RequestBody CommonRequestDTO<ResetPasswordRequestDTO> request) throws MessagingException, IOException {
-        userService.updatePasswordForUser(request.getPayload());
-        return "Pass reseted";
+    public CommonResponseDTO updatePasswordForUser(@RequestBody CommonRequestDTO<ResetPasswordRequestDTO> request) {
+        try {
+            userService.updatePasswordForUser(request.getPayload());
+        } catch (Exception e) {
+            return CommonResponseDTO.createFailResponse(new CommonError("Error updating the password"));
+        }
+        return CommonResponseDTO.createSuccesResponse("User password updated.");
     }
-
 }

@@ -72,6 +72,14 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtUtil.generateJwtToken(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        /**
+         * TODO
+         * user_auth_tokens
+         * "userID": "userida21313",
+         * "tokens": [ "token1", "token2" ]
+         * login => check if it's first login for user and add new token
+         * logout => remove token from list
+         */
         return ResponseEntity.ok(
                 CommonResponseDTO.createSuccesResponse(LoginResponseDTO.builder()
                         .id(userDetails.getId())
