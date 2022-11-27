@@ -41,5 +41,6 @@ public class SonpollApplication implements CommandLineRunner {
 //                .build());
         System.out.println("\n DB POLLS: \n ");
         pollRepository.findAll().forEach(poll -> System.out.println(poll.toString()));
+        pollRepository.findByOwner("USER-ID-TEST");
     }
 }

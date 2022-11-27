@@ -3,7 +3,9 @@ package com.sonpoll.oradea.sonpoll.user.service;
 import com.sonpoll.oradea.sonpoll.common.request.ResetPasswordRequestDTO;
 import com.sonpoll.oradea.sonpoll.mail.EmailService;
 import com.sonpoll.oradea.sonpoll.user.model.User;
+import com.sonpoll.oradea.sonpoll.user.model.UserAuthToken;
 import com.sonpoll.oradea.sonpoll.user.model.UserToken;
+import com.sonpoll.oradea.sonpoll.user.repository.AuthTokenRepo;
 import com.sonpoll.oradea.sonpoll.user.repository.UserRepository;
 import com.sonpoll.oradea.sonpoll.user.repository.UserTokenRepository;
 import lombok.AllArgsConstructor;
@@ -28,6 +30,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserTokenRepository userTokenRepo;
+    private final AuthTokenRepo authTokenRepo;
     private final EmailService emailSender;
 
     public List<User> findAll() {
@@ -88,5 +91,9 @@ public class UserService {
         } else {
             logger.error("Token not found or already used :( ");
         }
+    }
+
+    public Optional<UserAuthToken> getAuthTokensForUser(final String userId) {
+        return authTokenRepo.findByUserId(userId);
     }
 }

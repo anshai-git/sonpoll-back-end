@@ -6,9 +6,12 @@ import com.sonpoll.oradea.sonpoll.common.CommonError;
 import com.sonpoll.oradea.sonpoll.common.CommonRequestDTO;
 import com.sonpoll.oradea.sonpoll.common.CommonResponseDTO;
 import com.sonpoll.oradea.sonpoll.common.request.LoginRequestDTO;
+import com.sonpoll.oradea.sonpoll.common.request.LogoutRequest;
 import com.sonpoll.oradea.sonpoll.common.request.RegisterRequestDTO;
 import com.sonpoll.oradea.sonpoll.common.response.LoginResponseDTO;
 import com.sonpoll.oradea.sonpoll.user.model.User;
+import com.sonpoll.oradea.sonpoll.user.model.UserAuthToken;
+import com.sonpoll.oradea.sonpoll.user.repository.AuthTokenRepo;
 import com.sonpoll.oradea.sonpoll.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/auth")
@@ -32,6 +39,9 @@ public class AuthController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    AuthTokenRepo authTokenRepo;
 
     @Autowired
     PasswordEncoder encoder;
@@ -72,6 +82,18 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtUtil.generateJwtToken(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Optional<UserAuthToken> authTokens = userService.getAuthTokensForUser(userDetails.getId());
+        if(authTokens.isPresent()){
+            if(authTokens.get().getTokens().isEmpty()) {
+                Set<String> userTokens = new HashSet<>();
+                userTokens.add(token);
+                authTokens.get().setTokens(userTokens);
+                authTokenRepo.save(authTokens.get());
+            } else {
+                authTokens.get().getTokens().add(token);
+                authTokenRepo.save(authTokens.get());
+            }
+        }
         /**
          * TODO
          * user_auth_tokens
@@ -87,5 +109,13 @@ public class AuthController {
                         .email(userDetails.getEmail())
                         .token(token)
                         .build()));
+    }
+    @PostMapping("logout")
+    public void logout(@RequestBody CommonRequestDTO<LogoutRequest> logoutRequest) {
+        Optional<UserAuthToken> authTokens = userService.getAuthTokensForUser(logoutRequest.getPayload().userId());
+        if(authTokens.isPresent()) {
+            authTokens.get().getTokens().removeIf(s -> s.equals(logoutRequest.getPayload().token()));
+            authTokenRepo.save(authTokens.get());
+        }
     }
 }
