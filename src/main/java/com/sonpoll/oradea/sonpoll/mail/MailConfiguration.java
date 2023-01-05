@@ -18,6 +18,7 @@ public class MailConfiguration {
         mailSender.setUsername("apikey");
         mailSender.setPassword("sendGridPass");
 
+        // TODO Flisc 05.01.2023 set pass
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
