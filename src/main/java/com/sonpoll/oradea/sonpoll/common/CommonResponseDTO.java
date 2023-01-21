@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString
 public class CommonResponseDTO<T> {
     private T response;
-    private CommonError error;// TODO Flisc 17.11.2022 ErrorObject with code  && message
+    private CommonError error;
 
     private CommonResponseDTO(final T response, final CommonError error) {
         this.response = response;

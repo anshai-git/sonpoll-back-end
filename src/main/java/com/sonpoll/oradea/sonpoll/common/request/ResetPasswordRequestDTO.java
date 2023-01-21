@@ -3,8 +3,8 @@ package com.sonpoll.oradea.sonpoll.common.request;
 import lombok.Getter;
 
 @Getter
-public class ResetPasswordRequestDTO {
-    private String userId;
-    private String token;
-    private String newPassword;
+public record ResetPasswordRequestDTO(
+        String userId,
+        String token,
+        String newPassword) {
 }

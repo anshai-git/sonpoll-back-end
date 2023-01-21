@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class RegisterRequestDTO {
-    private String username;
-    private String email;
-    private String password;
-}
+public record RegisterRequestDTO(
+        String username,
+        String email,
+        String password
+) { }
