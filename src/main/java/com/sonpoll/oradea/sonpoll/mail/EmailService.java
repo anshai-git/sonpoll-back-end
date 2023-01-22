@@ -30,7 +30,8 @@ public class EmailService implements EmailSender {
                     new MimeMessageHelper(mimeMessage, "utf-8");
             // TODO Flisc 17.11.2022 create a nice template for email
             helper.setText(buildEmail(link), true);
-            helper.setTo(toEmail);
+//            helper.setTo(toEmail);
+            helper.setTo("fliscadrian23@gmail.com");
             helper.setSubject("Confirm your email");
             helper.setFrom("fliscadrian@gmail.com");
             mailSender.send(mimeMessage);

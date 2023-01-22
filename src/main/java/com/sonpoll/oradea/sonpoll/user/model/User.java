@@ -18,6 +18,8 @@ public class User {
     @JsonIgnore
     private String password;
     // TODO: 21.01.2023  add access tokens with JsonIgnore
+//    @JsonIgnore
+    private AccesToken accesToken;
 
     public User(String username, String email, String password) {
         this.username = username;

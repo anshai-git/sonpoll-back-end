@@ -10,8 +10,6 @@ import com.sonpoll.oradea.sonpoll.common.request.LogoutRequest;
 import com.sonpoll.oradea.sonpoll.common.request.RegisterRequestDTO;
 import com.sonpoll.oradea.sonpoll.common.response.LoginResponseDTO;
 import com.sonpoll.oradea.sonpoll.user.model.User;
-import com.sonpoll.oradea.sonpoll.user.model.UserAuthToken;
-import com.sonpoll.oradea.sonpoll.user.repository.AuthTokenRepo;
 import com.sonpoll.oradea.sonpoll.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -39,9 +29,6 @@ public class AuthController {
 
     @Autowired
     UserService userService;
-
-    @Autowired
-    AuthTokenRepo authTokenRepo;
 
     @Autowired
     PasswordEncoder encoder;
@@ -78,24 +65,26 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody CommonRequestDTO<LoginRequestDTO> loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getPayload().getUsername(),
-                                                        loginRequest.getPayload().getPassword()));
+                        loginRequest.getPayload().getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtUtil.generateJwtToken(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        Optional<UserAuthToken> authTokens = userService.getAuthTokensForUser(userDetails.getId());
-        if(authTokens.isPresent()){
-            if(authTokens.get().getTokens().isEmpty()) {
-                Set<String> userTokens = new HashSet<>();
-                userTokens.add(token);
-                authTokens.get().setTokens(userTokens);
-                authTokenRepo.save(authTokens.get());
-            } else {
-                authTokens.get().getTokens().add(token);
-                authTokenRepo.save(authTokens.get());
-            }
-        }
         /**
          * TODO
+         *
+         Optional<UserAuthToken> authTokens = userService.getAuthTokensForUser(userDetails.getId());
+         if(authTokens.isPresent()){
+         if(authTokens.get().getTokens().isEmpty()) {
+         Set<String> userTokens = new HashSet<>();
+         userTokens.add(token);
+         authTokens.get().setTokens(userTokens);
+         authTokenRepo.save(authTokens.get());
+         } else {
+         authTokens.get().getTokens().add(token);
+         authTokenRepo.save(authTokens.get());
+         }
+         }
+         *
          * user_auth_tokens
          * "userID": "userida21313",
          * "tokens": [ "token1", "token2" ]
@@ -110,12 +99,14 @@ public class AuthController {
                         .token(token)
                         .build()));
     }
+
     @PostMapping("logout")
     public void logout(@RequestBody CommonRequestDTO<LogoutRequest> logoutRequest) {
-        Optional<UserAuthToken> authTokens = userService.getAuthTokensForUser(logoutRequest.getPayload().userId());
-        if(authTokens.isPresent()) {
-            authTokens.get().getTokens().removeIf(s -> s.equals(logoutRequest.getPayload().token()));
-            authTokenRepo.save(authTokens.get());
-        }
+        // TODO: 22.01.2023 1 token or multiples ??
+//        Optional<UserAuthToken> authTokens = userService.getAuthTokensForUser(logoutRequest.getPayload().userId());
+//        if (authTokens.isPresent()) {
+//            authTokens.get().getTokens().removeIf(s -> s.equals(logoutRequest.getPayload().token()));
+//            authTokenRepo.save(authTokens.get());
+//        }
     }
 }

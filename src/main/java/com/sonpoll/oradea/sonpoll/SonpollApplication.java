@@ -2,7 +2,6 @@ package com.sonpoll.oradea.sonpoll;
 
 import com.sonpoll.oradea.sonpoll.poll.repository.PollRepository;
 import com.sonpoll.oradea.sonpoll.user.repository.UserRepository;
-import com.sonpoll.oradea.sonpoll.user.repository.UserTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,8 +18,6 @@ public class SonpollApplication implements CommandLineRunner {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    UserTokenRepository userTokenRepository;
-    @Autowired
     PollRepository pollRepository;
 
     public static void main(String[] args) {
@@ -32,7 +29,7 @@ public class SonpollApplication implements CommandLineRunner {
         System.out.println("\n DB Users: \n ");
         userRepository.findAll().forEach(user -> System.out.println(user.toString()));
         System.out.println("\n DB Tokens: \n ");
-        userTokenRepository.findAll().forEach(user -> System.out.println(user.toString()));
+//        userTokenRepository.findAll().forEach(user -> System.out.println(user.toString()));
 //        pollRepository.save(Poll.builder()
 //                .owner("USER-ID-TEST")
 //                .publicResults(true)

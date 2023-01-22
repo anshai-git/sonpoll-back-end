@@ -30,5 +30,10 @@ public class PollController {
     public CommonResponseDTO<Poll> getPollByOwner(@RequestParam String ownerId) {
         return pollService.getPollByOwner(ownerId);
     }
+    @PatchMapping("sendVote")
+    public CommonResponseDTO<String> sendVote(@RequestBody CommonRequestDTO<Poll> voteRequest) {
+        // TODO: 22.01.2023 implement 
+        return null;
+    }
 
 }
