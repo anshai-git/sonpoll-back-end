@@ -52,5 +52,10 @@ public class PollController {
     public CommonResponseDTO<Poll> updatePollVotes(@RequestBody CommonRequestDTO<Poll> updateRequest) {
         return pollService.updatePollVotes(updateRequest.getPayload());
     }
+    @PatchMapping("sendVote")
+    public CommonResponseDTO<String> sendVote(@RequestBody CommonRequestDTO<Poll> voteRequest) {
+        // TODO: 22.01.2023 implement 
+        return null;
+    }
 
 }
