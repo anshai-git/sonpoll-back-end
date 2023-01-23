@@ -1,10 +1,12 @@
 package com.sonpoll.oradea.sonpoll.poll.model;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
+@Builder
 public class Question {
     private String title;
     private String description;

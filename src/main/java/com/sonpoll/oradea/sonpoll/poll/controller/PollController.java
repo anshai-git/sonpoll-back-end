@@ -2,9 +2,10 @@ package com.sonpoll.oradea.sonpoll.poll.controller;
 
 import com.sonpoll.oradea.sonpoll.common.CommonRequestDTO;
 import com.sonpoll.oradea.sonpoll.common.CommonResponseDTO;
+import com.sonpoll.oradea.sonpoll.common.exceptions.AuthorizationException;
 import com.sonpoll.oradea.sonpoll.poll.model.CreatePollRequest;
 import com.sonpoll.oradea.sonpoll.poll.model.Poll;
-import com.sonpoll.oradea.sonpoll.poll.service.PollService;
+import com.sonpoll.oradea.sonpoll.poll.service.PollServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import java.util.List;
 public class PollController {
 
     @Autowired
-    PollService pollService;
+    PollServiceImpl pollService;
 
     public CommonResponseDTO createPoll(@RequestBody CommonRequestDTO<CreatePollRequest> request) {
         return pollService.createPoll(request.getPayload());
@@ -23,17 +24,31 @@ public class PollController {
 
     @GetMapping("findAll")
     public CommonResponseDTO<List<Poll>> getAllPolls() {
-        return CommonResponseDTO.createSuccesResponse(pollService.getAllPolls());
+        return pollService.getAllPolls();
     }
 
     @GetMapping("findByOwner")
-    public CommonResponseDTO<Poll> getPollByOwner(@RequestParam String ownerId) {
-        return pollService.getPollByOwner(ownerId);
+    public CommonResponseDTO<Poll> getPollByOwner(@RequestBody CommonRequestDTO<String> request) {
+        return pollService.getPollByOwner(request.getPayload());
     }
-    @PatchMapping("sendVote")
-    public CommonResponseDTO<String> sendVote(@RequestBody CommonRequestDTO<Poll> voteRequest) {
-        // TODO: 22.01.2023 implement 
-        return null;
+
+    @GetMapping("findById")
+    public CommonResponseDTO<Poll> getPollById(@RequestBody CommonRequestDTO<String> request) {
+        return pollService.getPollById(request.getPayload());
+    }
+
+    @PatchMapping("updatePoll")
+    public CommonResponseDTO<Poll> updatePoll(@RequestBody CommonRequestDTO<Poll> updateRequest) {
+        try {
+            return pollService.updatePoll(updateRequest.getPayload());
+        } catch (AuthorizationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PatchMapping("updateVotes")
+    public CommonResponseDTO<Poll> updatePollVotes(@RequestBody CommonRequestDTO<Poll> updateRequest) {
+        return pollService.updatePollVotes(updateRequest.getPayload());
     }
 
 }
