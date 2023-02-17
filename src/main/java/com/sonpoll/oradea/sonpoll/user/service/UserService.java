@@ -2,14 +2,22 @@ package com.sonpoll.oradea.sonpoll.user.service;
 
 import com.sonpoll.oradea.sonpoll.common.CommonError;
 import com.sonpoll.oradea.sonpoll.common.CommonResponseDTO;
+import com.sonpoll.oradea.sonpoll.common.Environment;
+import com.sonpoll.oradea.sonpoll.common.EnvironmentTask;
+import com.sonpoll.oradea.sonpoll.common.EnvironmentUtils;
+import com.sonpoll.oradea.sonpoll.common.PropertyKeys;
 import com.sonpoll.oradea.sonpoll.common.request.ResetPasswordRequestDTO;
 import com.sonpoll.oradea.sonpoll.mail.EmailService;
 import com.sonpoll.oradea.sonpoll.user.model.AccesToken;
 import com.sonpoll.oradea.sonpoll.user.model.User;
 import com.sonpoll.oradea.sonpoll.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,15 +28,23 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.function.Function;
 
+@Slf4j
 @Service
-@AllArgsConstructor
 public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    private final UserRepository userRepository;
-    private final EmailService emailSender;
+    @Value("${environment}")
+    private String environment;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private EmailService emailSender;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -50,14 +66,16 @@ public class UserService {
         Optional<User> user = userRepository.findByEmail(userEmail);
         String resetLink, token;
         if (user.isPresent()) {
-//            Optional<UserToken> accesToken = userTokenRepo.findByUserId(user.get().getId());
+            // Optional<UserToken> accesToken =
+            // userTokenRepo.findByUserId(user.get().getId());
             AccesToken accesToken = user.get().getAccesToken();
             if (accesToken != null && accesToken.isActive()) {
                 token = accesToken.getToken();
-//                userTokenRepo.save(accesToken.get());
+                // userTokenRepo.save(accesToken.get());
             } else {
                 LocalDateTime expirationDate = LocalDateTime.now().plus(Duration.of(15, ChronoUnit.MINUTES));
-//                UserToken newToken = new UserToken(user.get().getId(), UUID.randomUUID().toString(), false, expirationDate);
+                // UserToken newToken = new UserToken(user.get().getId(),
+                // UUID.randomUUID().toString(), false, expirationDate);
                 AccesToken newToken = new AccesToken(UUID.randomUUID().toString(), false, expirationDate);
                 user.get().setAccesToken(newToken);
                 userRepository.save(user.get());
@@ -69,16 +87,44 @@ public class UserService {
                     .append("&&token=")
                     .append(token)
                     .toString();
-            emailSender.sendEmail(userEmail, resetLink);
+
+            sendResetMail(userEmail, resetLink);
+
             return CommonResponseDTO.createSuccesResponse("Email has been sent");
         } else {
             logger.error("User not found: userId: {}", userEmail);
-            return CommonResponseDTO.createFailResponse(new CommonError("404", "User not found with email: "+ userEmail));
+            return CommonResponseDTO
+                    .createFailResponse(new CommonError("404", "User not found with email: " + userEmail));
+        }
+    }
+
+    /**
+     * NOTE: Depending on the environment it will either just log the reset
+     * information or send the email.
+     */
+    private void sendResetMail(final String emailAddress, final String resetLink) {
+        final EnvironmentTask task = EnvironmentTask.builder()
+                .onDevServder(() -> {
+                    log.info(resetLink);
+                    return null;
+                })
+                .onProdServder(() -> {
+                    emailSender.sendEmail(emailAddress, resetLink);
+                    return null;
+                })
+                .build();
+
+        try {
+            EnvironmentUtils.handleTask(environment, task);
+        } catch (final Exception exception) {
+            log.error("Error while trying to send reset password email", exception);
         }
     }
 
     public void updatePasswordForUser(final ResetPasswordRequestDTO resetPasswordRequest) {
-//        Optional<UserToken> token = userTokenRepo.findByUserIdAndToken(resetPasswordRequest.getUserId(), resetPasswordRequest.getToken());
+        // Optional<UserToken> token =
+        // userTokenRepo.findByUserIdAndToken(resetPasswordRequest.getUserId(),
+        // resetPasswordRequest.getToken());
         Optional<User> user = userRepository.findById(resetPasswordRequest.userId());
         AccesToken resetToken = user.get().getAccesToken();
         final PasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -94,7 +140,7 @@ public class UserService {
             logger.error("User not found with userId: {}", resetPasswordRequest.userId());
         }
     }
-//    public Optional<UserAuthToken> getAuthTokensForUser(final String userId) {
-//        return authTokenRepo.findByUserId(userId);
-//    }
+    // public Optional<UserAuthToken> getAuthTokensForUser(final String userId) {
+    // return authTokenRepo.findByUserId(userId);
+    // }
 }

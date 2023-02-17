@@ -7,6 +7,7 @@ import com.sonpoll.oradea.sonpoll.poll.model.CreatePollRequest;
 import com.sonpoll.oradea.sonpoll.poll.model.Poll;
 import com.sonpoll.oradea.sonpoll.poll.repository.PollRepository;
 import lombok.AllArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,7 @@ public class PollServiceImpl implements PollService {
                 ? CommonResponseDTO.createSuccesResponse(pollByOwner.get())
                 : CommonResponseDTO.createFailResponse(new CommonError("Poll can't be found for userId: " + ownerId));
     }
+
     public CommonResponseDTO<Poll> getPollById(final String pollId) {
         Optional<Poll> poll = pollRepository.findById(pollId);
         return poll.isPresent()
@@ -63,7 +65,8 @@ public class PollServiceImpl implements PollService {
             pollToUpdate.setQuestions(updatedPoll.getQuestions());
             return CommonResponseDTO.createSuccesResponse(pollRepository.save(pollToUpdate));
         } else {
-            return CommonResponseDTO.createSuccesResponse(new CommonError("Poll with id: " + updatedPoll.getId() + " can't be found in database"));
+            return CommonResponseDTO.createSuccesResponse(
+                    new CommonError("Poll with id: " + updatedPoll.getId() + " can't be found in database"));
         }
     }
 
@@ -75,7 +78,8 @@ public class PollServiceImpl implements PollService {
             pollToUpdate.setQuestions(updatedPoll.getQuestions());
             return CommonResponseDTO.createSuccesResponse(pollRepository.save(pollToUpdate));
         } else {
-            return CommonResponseDTO.createSuccesResponse(new CommonError("Poll with id: " + updatedPoll.getId() + " can't be found in database"));
+            return CommonResponseDTO.createSuccesResponse(
+                    new CommonError("Poll with id: " + updatedPoll.getId() + " can't be found in database"));
         }
     }
 

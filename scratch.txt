@@ -1,0 +1,3 @@
+[ERROR][2023-02-17 12:34:25] .../vim/lsp/rpc.lua:734	"rpc"	"/usr/lib/jvm/java-19-openjdk/bin/java"	"stderr"	"WARNING: Using incubator modules: jdk.incubator.vector, jdk.incubator.concurrent\n"
+[ERROR][2023-02-17 12:34:25] .../vim/lsp/rpc.lua:734	"rpc"	"/usr/lib/jvm/java-19-openjdk/bin/java"	"stderr"	"no main manifest attribute, in /home/anshai/.local/share/nvim/mason/packages/jdtls/features/org.eclipse.equinox.executable_3.8.2000.v20221201-0912.jar\n"
+

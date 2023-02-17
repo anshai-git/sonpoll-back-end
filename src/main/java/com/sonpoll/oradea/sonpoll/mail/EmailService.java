@@ -26,11 +26,10 @@ public class EmailService implements EmailSender {
     public void sendEmail(String toEmail, String link) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
-            MimeMessageHelper helper =
-                    new MimeMessageHelper(mimeMessage, "utf-8");
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
             // TODO Flisc 17.11.2022 create a nice template for email
             helper.setText(buildEmail(link), true);
-//            helper.setTo(toEmail);
+            // helper.setTo(toEmail);
             helper.setTo("fliscadrian23@gmail.com");
             helper.setSubject("Confirm your email");
             helper.setFrom("fliscadrian@gmail.com");
@@ -41,37 +40,43 @@ public class EmailService implements EmailSender {
         }
     }
 
-
     private String buildEmail(String link) {
         final String emailBody = new StringBuilder()
                 .append(FIRST_EMAIL_PART)
-                .append("Link: "+ link)
+                .append("Link: " + link)
                 .append(
-                        "<a href= \" "+ link + " \"  > Reset password </a> " +
-                        "</p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p> \n ")
+                        "<a href= \" " + link + " \"  > Reset password </a> " +
+                                "</p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p> \n ")
                 .append(SECOND_EMAIL_PART)
                 .toString();
         return emailBody;
 
     }
-    private static final String FIRST_EMAIL_PART = "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
+
+    private static final String FIRST_EMAIL_PART = "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n"
+            +
             "\n" +
             "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +
             "\n" +
-            "  <table role=\"presentation\" width=\"100%\" style=\"border-collapse:collapse;min-width:100%;width:100%!important\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n" +
+            "  <table role=\"presentation\" width=\"100%\" style=\"border-collapse:collapse;min-width:100%;width:100%!important\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n"
+            +
             "    <tbody><tr>\n" +
             "      <td width=\"100%\" height=\"53\" bgcolor=\"#0b0c0c\">\n" +
             "        \n" +
-            "        <table role=\"presentation\" width=\"100%\" style=\"border-collapse:collapse;max-width:580px\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\">\n" +
+            "        <table role=\"presentation\" width=\"100%\" style=\"border-collapse:collapse;max-width:580px\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" align=\"center\">\n"
+            +
             "          <tbody><tr>\n" +
             "            <td width=\"70\" bgcolor=\"#0b0c0c\" valign=\"middle\">\n" +
-            "                <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse\">\n" +
+            "                <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse\">\n"
+            +
             "                  <tbody><tr>\n" +
             "                    <td style=\"padding-left:10px\">\n" +
             "                  \n" +
             "                    </td>\n" +
-            "                    <td style=\"font-size:28px;line-height:1.315789474;Margin-top:4px;padding-left:10px\">\n" +
-            "                      <span style=\"font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#ffffff;text-decoration:none;vertical-align:top;display:inline-block\">Confirm your email</span>\n" +
+            "                    <td style=\"font-size:28px;line-height:1.315789474;Margin-top:4px;padding-left:10px\">\n"
+            +
+            "                      <span style=\"font-family:Helvetica,Arial,sans-serif;font-weight:700;color:#ffffff;text-decoration:none;vertical-align:top;display:inline-block\">Confirm your email</span>\n"
+            +
             "                    </td>\n" +
             "                  </tr>\n" +
             "                </tbody></table>\n" +
@@ -83,12 +88,14 @@ public class EmailService implements EmailSender {
             "      </td>\n" +
             "    </tr>\n" +
             "  </tbody></table>\n" +
-            "  <table role=\"presentation\" class=\"m_-6186904992287805515content\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;max-width:580px;width:100%!important\" width=\"100%\">\n" +
+            "  <table role=\"presentation\" class=\"m_-6186904992287805515content\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;max-width:580px;width:100%!important\" width=\"100%\">\n"
+            +
             "    <tbody><tr>\n" +
             "      <td width=\"10\" height=\"10\" valign=\"middle\"></td>\n" +
             "      <td>\n" +
             "        \n" +
-            "                <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse\">\n" +
+            "                <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse\">\n"
+            +
             "                  <tbody><tr>\n" +
             "                    <td bgcolor=\"#1D70B8\" width=\"100%\" height=\"10\"></td>\n" +
             "                  </tr>\n" +
@@ -101,20 +108,20 @@ public class EmailService implements EmailSender {
             "\n" +
             "\n" +
             "\n" +
-            "  <table role=\"presentation\" class=\"m_-6186904992287805515content\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;max-width:580px;width:100%!important\" width=\"100%\">\n" +
+            "  <table role=\"presentation\" class=\"m_-6186904992287805515content\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse;max-width:580px;width:100%!important\" width=\"100%\">\n"
+            +
             "    <tbody><tr>\n" +
             "      <td height=\"30\"><br></td>\n" +
             "    </tr>\n" +
             "    <tr>\n" +
-            "      <td width=\"10\" valign=\"middle\"><br></td>\n" ;
-    private static final String SECOND_EMAIL_PART =
-      "      </td>\n" +
-              "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
-              "    </tr>\n" +
-              "    <tr>\n" +
-              "      <td height=\"30\"><br></td>\n" +
-              "    </tr>\n" +
-              "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
-              "\n" +
-              "</div></div>";
+            "      <td width=\"10\" valign=\"middle\"><br></td>\n";
+    private static final String SECOND_EMAIL_PART = "      </td>\n" +
+            "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
+            "    </tr>\n" +
+            "    <tr>\n" +
+            "      <td height=\"30\"><br></td>\n" +
+            "    </tr>\n" +
+            "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
+            "\n" +
+            "</div></div>";
 }
