@@ -5,8 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import javax.persistence.Id;
 import java.util.List;
 
 @Document("polls")
@@ -15,17 +15,18 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class Poll {
-    @Id
+    @MongoId
     private String id;
     private String title;
     private String owner;
     private List<Question> questions;
     private boolean publicResults;
+    private List<String> assignees;
 
     // TODO: this should have:
-    // 1. A list of asignees representing the users that participate in this vote (list of user ids)
-    // 2. A boolean denoting if the owner participates in the vode or not
-    // 3. An invitation token that is used to invite users to a given poll
+    // - [x] A list of asignees representing the users that participate in this vote (list of user ids)
+    // - [] A boolean denoting if the owner participates in the vode or not
+    // - [] An invitation token that is used to invite users to a given poll
 
     // TODO: Also:
     // Users should probably be able to send an invitation to an other user for a poll by email /& username

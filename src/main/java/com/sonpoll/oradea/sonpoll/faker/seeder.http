@@ -1,0 +1,17 @@
+### Generate Users
+< {%
+    request.variables.set("count", "10")
+%}
+GET http://localhost:8080/faker/user/{{count}}
+
+### Generate Polls
+< {%
+    request.variables.set("count", "5")
+%}
+GET http://localhost:8080/faker/poll/{{count}}
+
+### Generate Votes
+< {%
+    request.variables.set("count", "5")
+%}
+GET http://localhost:8080/faker/vote/{{count}}

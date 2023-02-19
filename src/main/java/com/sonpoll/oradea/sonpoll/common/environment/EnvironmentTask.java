@@ -1,4 +1,4 @@
-package com.sonpoll.oradea.sonpoll.common;
+package com.sonpoll.oradea.sonpoll.common.environment;
 
 import java.util.concurrent.Callable;
 

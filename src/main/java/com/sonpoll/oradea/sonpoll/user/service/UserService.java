@@ -2,16 +2,13 @@ package com.sonpoll.oradea.sonpoll.user.service;
 
 import com.sonpoll.oradea.sonpoll.common.CommonError;
 import com.sonpoll.oradea.sonpoll.common.CommonResponseDTO;
-import com.sonpoll.oradea.sonpoll.common.Environment;
-import com.sonpoll.oradea.sonpoll.common.EnvironmentTask;
-import com.sonpoll.oradea.sonpoll.common.EnvironmentUtils;
-import com.sonpoll.oradea.sonpoll.common.PropertyKeys;
+import com.sonpoll.oradea.sonpoll.common.environment.EnvironmentTask;
+import com.sonpoll.oradea.sonpoll.common.environment.EnvironmentUtils;
 import com.sonpoll.oradea.sonpoll.common.request.ResetPasswordRequestDTO;
 import com.sonpoll.oradea.sonpoll.mail.EmailService;
 import com.sonpoll.oradea.sonpoll.user.model.AccesToken;
 import com.sonpoll.oradea.sonpoll.user.model.User;
 import com.sonpoll.oradea.sonpoll.user.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.slf4j.Logger;
@@ -28,8 +25,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.Callable;
-import java.util.function.Function;
 
 @Slf4j
 @Service

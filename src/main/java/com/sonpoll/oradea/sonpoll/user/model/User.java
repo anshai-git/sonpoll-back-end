@@ -1,24 +1,29 @@
 package com.sonpoll.oradea.sonpoll.user.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import javax.persistence.Id;
-
-@Document("users")
 @Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
+@Document("users")
 public class User {
-    @Id
+    @MongoId
     private String id;
     private String username;
     private String email;
     @JsonIgnore
     private String password;
     // TODO: 21.01.2023  add access tokens with JsonIgnore
-//    @JsonIgnore
+    // @JsonIgnore
     private AccesToken accesToken;
 
     public User(String username, String email, String password) {

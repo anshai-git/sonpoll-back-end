@@ -1,22 +1,21 @@
 package com.sonpoll.oradea.sonpoll.auth.security.jwt;
 
 import com.sonpoll.oradea.sonpoll.auth.security.services.UserDetailsImpl;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SecurityException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
 import java.util.Date;
+
+@Slf4j
 @Component
 public class JwtUtil {
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
     @Value("${sonpoll.app.jwtSecretKey}")
     private String jwtSecret;
@@ -25,36 +24,47 @@ public class JwtUtil {
     private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {
-
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        final UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        final byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        final Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs * 1000))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(key)
                 .compact();
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+        return getJwtParser().parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            getJwtParser().parseClaimsJws(authToken);
             return true;
-        } catch (SignatureException e) {
-            logger.error("Invalid JWT signature: {}", e.getMessage());
+        } catch (SecurityException e) {
+            log.error("Invalid JWT signature: {}", e.getMessage());
         } catch (MalformedJwtException e) {
-            logger.error("Invalid JWT token: {}", e.getMessage());
+            log.error("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
-            logger.error("JWT token is expired: {}", e.getMessage());
+            log.error("JWT token is expired: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            logger.error("JWT token is unsupported: {}", e.getMessage());
+            log.error("JWT token is unsupported: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            logger.error("JWT claims string is empty: {}", e.getMessage());
+            log.error("JWT claims string is empty: {}", e.getMessage());
         }
         return false;
+    }
+
+    private JwtParser getJwtParser () {
+        final byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        final Key key = Keys.hmacShaKeyFor(keyBytes);
+
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build();
+
     }
 }

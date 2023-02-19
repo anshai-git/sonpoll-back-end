@@ -3,10 +3,11 @@ package com.sonpoll.oradea.sonpoll.poll.controller;
 import com.sonpoll.oradea.sonpoll.common.CommonRequestDTO;
 import com.sonpoll.oradea.sonpoll.common.CommonResponseDTO;
 import com.sonpoll.oradea.sonpoll.common.exceptions.AuthorizationException;
-import com.sonpoll.oradea.sonpoll.poll.model.CreatePollRequest;
+import com.sonpoll.oradea.sonpoll.common.request.CreatePollRequest;
 import com.sonpoll.oradea.sonpoll.poll.model.Poll;
 import com.sonpoll.oradea.sonpoll.poll.service.PollServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,8 @@ public class PollController {
     @Autowired
     PollServiceImpl pollService;
 
-    public CommonResponseDTO createPoll(@RequestBody CommonRequestDTO<CreatePollRequest> request) {
+    public CommonResponseDTO createPoll(@RequestBody CommonRequestDTO<CreatePollRequest> request, final Authentication authentication) {
+        System.out.println(authentication);
         return pollService.createPoll(request.getPayload());
     }
 

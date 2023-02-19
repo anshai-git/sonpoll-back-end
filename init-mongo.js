@@ -41,10 +41,13 @@ db.users.insert([
     }
 ]);
 
+const users = db.users.find();
+
+
 db.polls.insert([
     {
         title: "Poll 1",
-        owner: "1",
+        owner: users.next()._id,
         publicResults: true,
         questions: [
             {
@@ -57,7 +60,7 @@ db.polls.insert([
                         textValue: "Option 1",
                         dateValue: null,
                         numberValue: null,
-                        userVotes: []
+                        userVotes: [users[1]._id, users[2]._id]
                     }
                 ]
             }
