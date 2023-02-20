@@ -19,8 +19,8 @@ public class PollController {
     @Autowired
     PollServiceImpl pollService;
 
-    public CommonResponseDTO createPoll(@RequestBody CommonRequestDTO<CreatePollRequest> request, final Authentication authentication) {
-        System.out.println(authentication);
+    public CommonResponseDTO createPoll(@RequestBody CommonRequestDTO<CreatePollRequest> request,
+            final Authentication authentication) {
         return pollService.createPoll(request.getPayload());
     }
 

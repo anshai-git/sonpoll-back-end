@@ -1,5 +1,6 @@
 package com.sonpoll.oradea.sonpoll.poll.service;
 
+import com.sonpoll.oradea.sonpoll.auth.utils.AuthUtil;
 import com.sonpoll.oradea.sonpoll.common.CommonError;
 import com.sonpoll.oradea.sonpoll.common.CommonResponseDTO;
 import com.sonpoll.oradea.sonpoll.common.exceptions.AuthorizationException;
@@ -8,6 +9,7 @@ import com.sonpoll.oradea.sonpoll.poll.model.Poll;
 import com.sonpoll.oradea.sonpoll.poll.repository.PollRepository;
 import lombok.AllArgsConstructor;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +19,9 @@ import java.util.Optional;
 @AllArgsConstructor
 public class PollServiceImpl implements PollService {
 
+    private final UserDetailsService userDetailsService;
     private final PollRepository pollRepository;
+    private final AuthUtil authUtil;
 
     public CommonResponseDTO<List<Poll>> getAllPolls() {
         final List<Poll> polls = this.pollRepository.findAll();
@@ -25,11 +29,12 @@ public class PollServiceImpl implements PollService {
     }
 
     public CommonResponseDTO<Poll> createPoll(final CreatePollRequest request) {
+
         return Optional.of(request)
-            .map(this::createPollFromRequest)
-            .map(pollRepository::save)
-            .map(CommonResponseDTO::createSuccesResponse)
-            .orElse(CommonResponseDTO.createFailResponse(new CommonError("Failed to create poll")));
+                .map(this::createPollFromRequest)
+                .map(pollRepository::save)
+                .map(CommonResponseDTO::createSuccesResponse)
+                .orElse(CommonResponseDTO.createFailResponse(new CommonError("Failed to create poll")));
     }
 
     public CommonResponseDTO<Poll> getPollByOwner(final String ownerId) {
@@ -78,7 +83,7 @@ public class PollServiceImpl implements PollService {
     private Poll createPollFromRequest(final CreatePollRequest request) {
         return Poll.builder()
                 .title(request.title())
-                .owner(request.owner())
+                .owner(authUtil.getCurrendUser().getId())
                 .questions(request.questions())
                 .publicResults(request.publicResults())
                 .build();

@@ -25,7 +25,7 @@ public class Poll {
 
     // TODO: this should have:
     // - [x] A list of asignees representing the users that participate in this vote (list of user ids)
-    // - [] A boolean denoting if the owner participates in the vode or not
+    // - [] A boolean denoting if the owner participates in the vote or not
     // - [] An invitation token that is used to invite users to a given poll
 
     // TODO: Also:

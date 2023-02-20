@@ -4,6 +4,6 @@ import com.sonpoll.oradea.sonpoll.poll.model.Question;
 
 import java.util.List;
 
-public record CreatePollRequest(String title, String owner, List<Question> questions, boolean publicResults) {
+public record CreatePollRequest(String title, List<Question> questions, boolean publicResults) {
 
 }
