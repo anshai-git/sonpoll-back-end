@@ -46,7 +46,11 @@ public class WebSecurityConfig {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeHttpRequests().requestMatchers("/auth/**").permitAll()
+                .authorizeHttpRequests()
+                .requestMatchers("/auth/**").permitAll()
+                // TODO: faker endpoints should have serious authorization on production, maybe it should be completely disabled there
+                // make it depend on the "environment"
+                .requestMatchers("/faker/**").permitAll()
                 .requestMatchers("**").permitAll()
                 .anyRequest().authenticated();
 

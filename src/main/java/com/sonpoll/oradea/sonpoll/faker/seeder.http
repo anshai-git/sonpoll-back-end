@@ -2,16 +2,16 @@
 < {%
     request.variables.set("count", "10")
 %}
-GET http://localhost:8080/faker/user/{{count}}
+GET http://localhost:3000/faker/user/{{count}}
 
 ### Generate Polls
 < {%
     request.variables.set("count", "5")
 %}
-GET http://localhost:8080/faker/poll/{{count}}
+GET http://localhost:3000/faker/poll/{{count}}
 
 ### Generate Votes
 < {%
     request.variables.set("count", "5")
 %}
-GET http://localhost:8080/faker/vote/{{count}}
+GET http://localhost:3000/faker/vote/{{count}}
