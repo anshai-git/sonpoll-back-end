@@ -1,5 +1,6 @@
 package com.sonpoll.oradea.sonpoll;
 
+import com.sonpoll.oradea.sonpoll.common.environment.EnvironmentCredentials;
 import com.sonpoll.oradea.sonpoll.poll.repository.PollRepository;
 import com.sonpoll.oradea.sonpoll.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,7 @@ public class SonpollApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         System.out.println("[SONPOLL] Application Startup");
+        EnvironmentCredentials env  = new EnvironmentCredentials();
+        System.out.println("prop test: " + env.getProp());
     }
 }
