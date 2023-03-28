@@ -34,3 +34,4 @@ build/
 
 ### Docker ###
 mongo-volume
+/src/main/resources/dev_flisc.properties

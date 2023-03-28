@@ -8,4 +8,5 @@ import lombok.Getter;
 public class LoginRequestDTO {
     private String username;
     private String password;
+    private boolean keepLoggedIn;
 }
