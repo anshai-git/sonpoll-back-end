@@ -1,6 +1,6 @@
 package com.sonpoll.oradea.sonpoll.user.service;
 
-import com.sonpoll.oradea.sonpoll.mail.EmailSender;
+import com.sonpoll.oradea.sonpoll.mail.EmailService;
 import com.sonpoll.oradea.sonpoll.user.model.User;
 import com.sonpoll.oradea.sonpoll.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final EmailSender emailSender;
+    private final EmailService emailSender;
 
 //    @Autowired
 //    public UserService(UserRepository userRepository, EmailService emailSender) {
@@ -37,8 +37,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void sendResetPassEmail() {
-//        emailSender.sendEmail("fliscadrian@gmail.com", "test")
-        return;
+    public void sendResetPassEmail()  {
+        emailSender.sendEmail("fliscadrian23@gmail.com");
+//        return;
     }
 }
