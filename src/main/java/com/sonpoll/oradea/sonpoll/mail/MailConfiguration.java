@@ -1,5 +1,7 @@
 package com.sonpoll.oradea.sonpoll.mail;
 
+import com.sonpoll.oradea.sonpoll.common.environment.EnvironmentCredentials;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,6 +11,10 @@ import java.util.Properties;
 
 @Configuration
 public class MailConfiguration {
+
+    @Autowired
+    EnvironmentCredentials environmentCredentials;
+
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -16,10 +22,7 @@ public class MailConfiguration {
         mailSender.setPort(587);
 
         mailSender.setUsername("apikey");
-        mailSender.setPassword("sendGridPass");
-
-        // TODO Flisc 05.01.2023 set pass
-        mailSender.setPassword("placeholder");
+        mailSender.setPassword(environmentCredentials.getSendGridPassword());
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
