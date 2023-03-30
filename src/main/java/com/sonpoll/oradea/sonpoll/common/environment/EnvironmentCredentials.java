@@ -18,8 +18,8 @@ public class EnvironmentCredentials {
     @Value("${sendGrid.config.password}")
     private String sendGridPassword;
 
-    @Value("${sendGrid.config.mail.pass}")
-    private String sendGridEmailPassword;
+//    @Value("${sendGrid.config.mail.pass}")
+//    private String sendGridEmailPassword;
 
 //  @Value("${spring.data.mongodb.uri}")
 //  private String mongoDbRemoteLink;
