@@ -116,11 +116,11 @@ public class UserServiceImpl implements UserService {
      */
     private void sendResetMail(final String emailAddress, final String resetLink) {
         final EnvironmentTask task = EnvironmentTask.builder()
-                .onDevServder(() -> {
+                .onDevServer(() -> {
                     log.info(resetLink);
                     return null;
                 })
-                .onProdServder(() -> {
+                .onProdServer(() -> {
                     emailSender.sendEmail(emailAddress, resetLink);
                     return null;
                 })

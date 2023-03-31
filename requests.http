@@ -4,9 +4,9 @@ Content-Type: application/json
 
 {
   "payload": {
-    "username": "sonpoll",
-    "password": "sonpoll",
-    "email": "sonpoll@gmail.com"
+    "username": "sonpoll3",
+    "password": "sonpoll3",
+    "email": "sonpoll3@gmail.com"
   }
 }
 

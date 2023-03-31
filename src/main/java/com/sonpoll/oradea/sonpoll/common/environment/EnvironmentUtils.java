@@ -9,12 +9,25 @@ public class EnvironmentUtils {
         final ExecutorService executor = Executors.newSingleThreadExecutor();
 
         final Future<Void> future = switch (EnvironmentType.valueOf(envType)) {
-            case DEV -> executor.submit(task.getOnDevServder());
-            case PROD -> executor.submit(task.getOnProdServder());
+            case DEV -> executor.submit(task.getOnDevServer());
+            case PROD -> executor.submit(task.getOnProdServer());
 
             default -> throw new IllegalArgumentException(envType);
         };
 
         future.get();
+    }
+
+    public static String handlePasswordByEnv(final String envType, final EnvironmentTask task) throws Exception {
+        final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        final Future<String> future = switch (EnvironmentType.valueOf(envType)) {
+            case DEV -> executor.submit(task.getPassOnDev());
+            case PROD -> executor.submit(task.getPassOnProd());
+
+            default -> throw new IllegalArgumentException(envType);
+        };
+
+        return future.get();
     }
 }

@@ -5,13 +5,17 @@ import com.sonpoll.oradea.sonpoll.auth.security.services.UserDetailsImpl;
 import com.sonpoll.oradea.sonpoll.common.CommonError;
 import com.sonpoll.oradea.sonpoll.common.CommonRequestDTO;
 import com.sonpoll.oradea.sonpoll.common.CommonResponseDTO;
+import com.sonpoll.oradea.sonpoll.common.environment.EnvironmentTask;
+import com.sonpoll.oradea.sonpoll.common.environment.EnvironmentUtils;
 import com.sonpoll.oradea.sonpoll.common.request.LoginRequestDTO;
 import com.sonpoll.oradea.sonpoll.common.request.LogoutRequest;
 import com.sonpoll.oradea.sonpoll.common.request.RegisterRequestDTO;
 import com.sonpoll.oradea.sonpoll.common.response.LoginResponseDTO;
 import com.sonpoll.oradea.sonpoll.user.model.User;
 import com.sonpoll.oradea.sonpoll.user.service.UserServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +31,12 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/auth")
+@Slf4j
 public class AuthController {
+
+    @Value("${environment}")
+    private String environment;
+
     @Autowired
     AuthenticationProvider authenticationProvider;
 
@@ -58,9 +67,11 @@ public class AuthController {
                     .badRequest()
                     .body(CommonResponseDTO.createFailResponse(new CommonError("Email already exist")));
         }
-        User user = new User(request.getUsername(),
-                request.getEmail(),
-                encoder.encode(request.getPassword()));
+        User user = User.builder()
+                .username(request.getUsername())
+                .email(request.getEmail())
+                .password(getPassword(request.getPassword()))
+                .build();
         userService.saveUser(user);
         return ResponseEntity.ok(CommonResponseDTO.createSuccesResponse(user));
     }
@@ -114,5 +125,18 @@ public class AuthController {
 //            authTokens.get().getTokens().removeIf(s -> s.equals(logoutRequest.getPayload().token()));
 //            authTokenRepo.save(authTokens.get());
 //        }
+    }
+
+    private String getPassword(final String plainPassword) {
+        final EnvironmentTask task = EnvironmentTask.builder()
+                .passOnDev( () -> { return plainPassword; })
+                .passOnProd( () -> { return encoder.encode(plainPassword); })
+                .build();
+        try {
+            return EnvironmentUtils.handlePasswordByEnv(environment, task);
+        } catch (final Exception exception) {
+            log.error("Error while trying to get password", exception);
+        }
+        return null;
     }
 }

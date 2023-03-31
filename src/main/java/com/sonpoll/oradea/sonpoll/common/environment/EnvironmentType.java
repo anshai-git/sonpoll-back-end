@@ -10,8 +10,8 @@ public enum EnvironmentType {
     private String value;
 
     public static EnvironmentType fromValue(final String envType) {
-        for(EnvironmentType env: EnvironmentType.values()) {
-            if(envType.equals(env.value)) return env;
+        for (EnvironmentType env : EnvironmentType.values()) {
+            if (envType.equals(env.value)) return env;
         }
         throw new IllegalArgumentException(envType);
     }

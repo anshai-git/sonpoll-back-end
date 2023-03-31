@@ -1,12 +1,10 @@
 package com.sonpoll.oradea.sonpoll.user.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -26,6 +24,7 @@ public class User {
     // @JsonIgnore
     private AccesToken accesToken;
 
+    @Builder
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;

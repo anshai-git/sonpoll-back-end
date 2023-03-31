@@ -1,13 +1,15 @@
 package com.sonpoll.oradea.sonpoll.common.environment;
 
-import java.util.concurrent.Callable;
-
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.concurrent.Callable;
 
 @Data
 @Builder
 public class EnvironmentTask {
-    private Callable<Void> onDevServder;
-    private Callable<Void> onProdServder;
+    private Callable<Void> onDevServer;
+    private Callable<Void> onProdServer;
+    private Callable<String> passOnDev;
+    private Callable<String> passOnProd;
 }
