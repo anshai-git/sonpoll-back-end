@@ -4,14 +4,13 @@ import com.sonpoll.oradea.sonpoll.poll.model.Option;
 import com.sonpoll.oradea.sonpoll.poll.model.Poll;
 import com.sonpoll.oradea.sonpoll.poll.model.Question;
 import com.sonpoll.oradea.sonpoll.poll.repository.PollRepository;
+import com.sonpoll.oradea.sonpoll.user.model.User;
 import com.sonpoll.oradea.sonpoll.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.sonpoll.oradea.sonpoll.user.model.User;
 
 import java.util.List;
 import java.util.Objects;
@@ -54,7 +53,7 @@ public class SeedController {
         final List<User> users = userRepository.findAll();
         final List<Poll> polls = pollRepository.findAll();
 
-       return IntStream.rangeClosed(1, count)
+        return IntStream.rangeClosed(1, count)
                 .mapToObj(index -> vote(users, polls))
                 .filter(Objects::nonNull)
                 .toList();

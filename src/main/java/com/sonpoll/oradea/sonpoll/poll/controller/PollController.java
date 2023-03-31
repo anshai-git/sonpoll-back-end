@@ -8,7 +8,11 @@ import com.sonpoll.oradea.sonpoll.poll.model.Poll;
 import com.sonpoll.oradea.sonpoll.poll.service.PollServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -20,7 +24,7 @@ public class PollController {
     PollServiceImpl pollService;
 
     public CommonResponseDTO createPoll(@RequestBody CommonRequestDTO<CreatePollRequest> request,
-            final Authentication authentication) {
+                                        final Authentication authentication) {
         return pollService.createPoll(request.getPayload());
     }
 
@@ -52,6 +56,7 @@ public class PollController {
     public CommonResponseDTO<Poll> updatePollVotes(@RequestBody CommonRequestDTO<Poll> updateRequest) {
         return pollService.updatePollVotes(updateRequest.getPayload());
     }
+
     @PatchMapping("sendVote")
     public CommonResponseDTO<String> sendVote(@RequestBody CommonRequestDTO<Poll> voteRequest) {
         // TODO: 22.01.2023 implement 

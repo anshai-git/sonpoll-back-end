@@ -10,11 +10,13 @@ import java.util.List;
 public interface PollService {
     CommonResponseDTO<List<Poll>> getAllPolls();
 
-    CommonResponseDTO<Poll> createPoll(final CreatePollRequest request);
+    CommonResponseDTO<Poll> createPoll(CreatePollRequest request);
 
-    CommonResponseDTO<Poll> getPollByOwner(final String ownerId);
-    CommonResponseDTO<Poll> getPollById(final String pollId);
+    CommonResponseDTO<Poll> getPollByOwner(String ownerId);
+
+    CommonResponseDTO<Poll> getPollById(String pollId);
 
     CommonResponseDTO<Poll> updatePoll(Poll updatedPoll) throws AuthorizationException;
+
     CommonResponseDTO<Poll> updatePollVotes(Poll updatedPoll);
 }

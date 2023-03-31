@@ -10,7 +10,7 @@ import com.sonpoll.oradea.sonpoll.common.request.LogoutRequest;
 import com.sonpoll.oradea.sonpoll.common.request.RegisterRequestDTO;
 import com.sonpoll.oradea.sonpoll.common.response.LoginResponseDTO;
 import com.sonpoll.oradea.sonpoll.user.model.User;
-import com.sonpoll.oradea.sonpoll.user.service.UserService;
+import com.sonpoll.oradea.sonpoll.user.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -32,7 +32,7 @@ public class AuthController {
     AuthenticationProvider authenticationProvider;
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @Autowired
     PasswordEncoder encoder;

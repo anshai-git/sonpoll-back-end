@@ -52,6 +52,7 @@ public class WebSecurityConfig {
                 // make it depend on the "environment"
                 .requestMatchers("/faker/**").permitAll()
                 .requestMatchers("**").permitAll()
+                .requestMatchers("/users/*").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

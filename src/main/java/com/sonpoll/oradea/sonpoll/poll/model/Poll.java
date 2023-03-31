@@ -30,4 +30,5 @@ public class Poll {
 
     // TODO: Also:
     // Users should probably be able to send an invitation to an other user for a poll by email /& username
+    // or a general link to access the poll
 }

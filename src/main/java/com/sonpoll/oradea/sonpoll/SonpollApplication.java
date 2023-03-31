@@ -27,6 +27,6 @@ public class SonpollApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         System.out.println("[SONPOLL] Application Startup");
-//        userRepository.findAll().forEach(user -> System.out.println(user.toString()));
+        userRepository.findAll().forEach(user -> System.out.println(user.toString() + "\n"));
     }
 }
