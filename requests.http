@@ -4,9 +4,9 @@ Content-Type: application/json
 
 {
   "payload": {
-    "username": "sonpoll3",
+    "username": "prodTest",
     "password": "sonpoll3",
-    "email": "sonpoll3@gmail.com"
+    "email": "sonpoll5@gmail.com"
   }
 }
 
@@ -16,8 +16,8 @@ Content-Type: application/json
 
 {
   "payload": {
-    "username": "sonpoll",
-    "password": "sonpoll"
+    "username": "profileTest",
+    "password": "sonpoll3"
   }
 }
 

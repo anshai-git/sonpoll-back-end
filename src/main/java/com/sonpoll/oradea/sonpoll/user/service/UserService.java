@@ -1,6 +1,7 @@
 package com.sonpoll.oradea.sonpoll.user.service;
 
 import com.sonpoll.oradea.sonpoll.common.CommonResponseDTO;
+import com.sonpoll.oradea.sonpoll.common.request.RegisterRequestDTO;
 import com.sonpoll.oradea.sonpoll.common.request.ResetPasswordRequestDTO;
 import com.sonpoll.oradea.sonpoll.user.model.User;
 
@@ -19,4 +20,6 @@ public interface UserService {
     CommonResponseDTO sendResetPassEmail(String userEmail);
 
     void updatePasswordForUser(ResetPasswordRequestDTO resetPasswordRequest);
+
+    CommonResponseDTO registerUser(final RegisterRequestDTO registerRequest);
 }

@@ -2,10 +2,9 @@ package com.sonpoll.oradea.sonpoll.user.service;
 
 import com.sonpoll.oradea.sonpoll.common.CommonError;
 import com.sonpoll.oradea.sonpoll.common.CommonResponseDTO;
-import com.sonpoll.oradea.sonpoll.common.environment.EnvironmentTask;
-import com.sonpoll.oradea.sonpoll.common.environment.EnvironmentUtils;
+import com.sonpoll.oradea.sonpoll.common.environment.profiler.EnvironmentTask;
+import com.sonpoll.oradea.sonpoll.common.request.RegisterRequestDTO;
 import com.sonpoll.oradea.sonpoll.common.request.ResetPasswordRequestDTO;
-import com.sonpoll.oradea.sonpoll.mail.EmailService;
 import com.sonpoll.oradea.sonpoll.user.model.AccesToken;
 import com.sonpoll.oradea.sonpoll.user.model.User;
 import com.sonpoll.oradea.sonpoll.user.repository.UserRepository;
@@ -13,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,14 +31,11 @@ public class UserServiceImpl implements UserService {
 
     private static final String RESET_PASS_BASE_PATH = "localhost:4200/auth/resetPasswrod";
 
-    @Value("${environment}")
-    private String environment;
-
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private EmailService emailSender;
+    private EnvironmentTask environmentTask;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -54,6 +49,23 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByEmail(email);
     }
 
+    public CommonResponseDTO registerUser(final RegisterRequestDTO registerRequest) {
+        if (findByUsername(registerRequest.getUsername()).isPresent()) {
+            return CommonResponseDTO.createFailResponse(new CommonError("Username already exist"));
+        }
+
+        if (existsByEmail(registerRequest.getEmail())) {
+            return CommonResponseDTO.createFailResponse(new CommonError("Email already exist"));
+        }
+
+        User user = User.builder()
+                .username(registerRequest.getUsername())
+                .email(registerRequest.getEmail())
+                .password(environmentTask.getPassword(registerRequest.getPassword()))
+                .build();
+        return CommonResponseDTO.createSuccesResponse(saveUser(user));
+    }
+
     public User saveUser(final User user) {
         return userRepository.save(user);
     }
@@ -62,16 +74,11 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = userRepository.findByEmail(userEmail);
         String resetLink, token;
         if (user.isPresent()) {
-            // Optional<UserToken> accesToken =
-            // userTokenRepo.findByUserId(user.get().getId());
             AccesToken accesToken = user.get().getAccesToken();
             if (accesToken != null && accesToken.isActive()) {
                 token = accesToken.getToken();
-                // userTokenRepo.save(accesToken.get());
             } else {
                 LocalDateTime expirationDate = LocalDateTime.now().plus(Duration.of(15, ChronoUnit.MINUTES));
-                // UserToken newToken = new UserToken(user.get().getId(),
-                // UUID.randomUUID().toString(), false, expirationDate);
                 AccesToken newToken = new AccesToken(UUID.randomUUID().toString(), false, expirationDate);
                 user.get().setAccesToken(newToken);
                 userRepository.save(user.get());
@@ -82,8 +89,7 @@ public class UserServiceImpl implements UserService {
                     .append("?userId=" .concat(user.get().getId()))
                     .append("&&token=" .concat(token))
                     .toString();
-
-            sendResetMail(userEmail, resetLink);
+            environmentTask.sendResetPasswordEmail(userEmail, resetLink);
 
             return CommonResponseDTO.createSuccesResponse("Email has been sent");
         } else {
@@ -110,26 +116,4 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    /**
-     * NOTE: Depending on the environment it will either just log the reset
-     * information or send the email.
-     */
-    private void sendResetMail(final String emailAddress, final String resetLink) {
-        final EnvironmentTask task = EnvironmentTask.builder()
-                .onDevServer(() -> {
-                    log.info(resetLink);
-                    return null;
-                })
-                .onProdServer(() -> {
-                    emailSender.sendEmail(emailAddress, resetLink);
-                    return null;
-                })
-                .build();
-
-        try {
-            EnvironmentUtils.handleTask(environment, task);
-        } catch (final Exception exception) {
-            log.error("Error while trying to send reset password email", exception);
-        }
-    }
 }
