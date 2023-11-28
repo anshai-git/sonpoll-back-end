@@ -15,7 +15,7 @@ public class EnvironmentCredentials {
 //  @Value("${spring.data.mongodb.password}")
 //  private String mongoDbPassword;
 
-    @Value("${sendGrid.config.password}")
+    @Value("${sendGrid.password}")
     private String sendGridPassword;
 
 //    @Value("${sendGrid.config.mail.pass}")

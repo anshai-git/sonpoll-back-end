@@ -35,3 +35,4 @@ build/
 ### Docker ###
 mongo-volume
 /src/main/resources/env_dev.properties
+/lib/*

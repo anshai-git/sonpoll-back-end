@@ -6,9 +6,13 @@ import com.sonpoll.oradea.sonpoll.common.CommonResponseDTO;
 import com.sonpoll.oradea.sonpoll.common.request.ResetPasswordRequestDTO;
 import com.sonpoll.oradea.sonpoll.mail.ResetEmailRequest;
 import com.sonpoll.oradea.sonpoll.user.model.User;
-import com.sonpoll.oradea.sonpoll.user.service.UserService;
+import com.sonpoll.oradea.sonpoll.user.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -17,7 +21,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @GetMapping()
     public List<User> getUsers() {

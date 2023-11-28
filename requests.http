@@ -4,9 +4,9 @@ Content-Type: application/json
 
 {
   "payload": {
-    "username": "sonpoll",
-    "password": "sonpoll",
-    "email": "sonpoll@gmail.com"
+    "username": "prodTest",
+    "password": "sonpoll3",
+    "email": "sonpoll5@gmail.com"
   }
 }
 
@@ -16,7 +16,17 @@ Content-Type: application/json
 
 {
   "payload": {
-    "username": "sonpoll",
-    "password": "sonpoll"
+    "username": "profileTest",
+    "password": "sonpoll3"
+  }
+}
+
+### Reset Password
+POST http://localhost:3000/users/resetPassword
+Content-Type: application/json
+
+{
+  "payload": {
+    "email": "sonpoll@gmail.com"
   }
 }

@@ -1,7 +1,7 @@
 package com.sonpoll.oradea.sonpoll.mail;
 
 import com.sonpoll.oradea.sonpoll.common.environment.EnvironmentCredentials;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,9 +10,9 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
 @Configuration
+@AllArgsConstructor
 public class MailConfiguration {
 
-    @Autowired
     EnvironmentCredentials environmentCredentials;
 
     @Bean

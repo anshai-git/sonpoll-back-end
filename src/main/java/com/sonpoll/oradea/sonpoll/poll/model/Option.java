@@ -1,7 +1,5 @@
 package com.sonpoll.oradea.sonpoll.poll.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
